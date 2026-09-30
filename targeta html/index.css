@@ -1,0 +1,57 @@
+/* Contenedor principal de la tarjeta */
+.product-card {
+  width: 250px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  font-family: Arial, sans-serif;
+}
+
+/* Área de la imagen para centrar el icono */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  margin-bottom: 15px;
+}
+
+.image-container img {
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Título del producto */
+.product-title {
+  font-size: 18px;
+  color: #333333;
+  margin: 10px 0 5px 0;
+  font-weight: 500;
+}
+
+/* Precio del producto */
+.product-price {
+  font-size: 16px;
+  color: #666666;
+  margin: 0 0 15px 0;
+}
+
+/* Botón verde inferior */
+.add-button {
+  width: 100%;
+  background-color: #2ecc71; /* Color verde similar al de la imagen */
+  color: white;
+  border: none;
+  padding: 10px 0;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Efecto al pasar el cursor sobre el botón */
+.add-button:hover {
+  background-color: #27ae60;
+}

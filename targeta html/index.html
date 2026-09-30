@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tarjeta de Producto Requerimientos</title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-active: #1e40af;
+      --bg-card: #ffffff;
+      --shadow-normal: 0 4px 6px -1px rgba(42, 13, 207, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      /*funcion 2: Sombra aumentada (6px más de elevación y mayor difusión) */
+      --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background-color: #600eca;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* Transición de transform y box-shadow */
+    .card {
+      background-color: var(--bg-card);
+      border-radius: 12px;
+      padding: 24px;
+      width: 280px;
+      box-shadow: var(--shadow-normal);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /*  Hover que eleva la tarjeta 6px y aumenta la sombra */
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .product-img {
+      background-color: #e2e8f0;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .product-info h3 {
+      margin: 0 0 8px 0;
+      color: #1e293b;
+      font-size: 18px;
+    }
+
+    .product-info p {
+      margin: 0;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /*  Estados del botón (base y focus-visible) */
+    .btn-add {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s ease, outline 0.2s ease;
+    }
+
+    /*  Estado Hover del botón */
+    .btn-add:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /*  Estado Active del botón */
+    .btn-add:active {
+      background-color: var(--primary-active);
+    }
+
+    /*  Estado Focus-visible del botón */
+    .btn-add:focus-visible {
+      outline: 3px solid #60a5fa;
+      outline-offset: 2px;
+    }
+
+    /*  Spinner oculto por defecto */
+    .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /*  Spinner aparece con la clase .cargando */
+    .btn-add.cargando .spinner {
+      display: block;
+    }
+
+    /* Icono SVG Check oculto por defecto */
+    .check-svg {
+      display: none;
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /*  Movimiento reducido con prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .card {
+        transition: none !important;
+      }
+      .card:hover {
+        transform: none !important; /* Evita la elevación física de la tarjeta */
+        box-shadow: var(--shadow-hover); /* Mantiene el cambio visual sutil de sombra */
+      }
+      .spinner {
+        animation: none !important; /* Detiene la rotación continua del spinner */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tarjeta de Producto -->
+  <article class="card">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-IXOhZChNYRtTDkXbfrbRgl-AJk76n6naRYZthNAnvQ&s=10" alt="Nombre del producto" class="product-img">
+    <div class="product-info">
+      <h3>Zapatillas yugiho</h3>
+      <p>S/730.00</p>
+    </div>
+    <button class="btn-add" id="btn-add">
+      <span class="spinner"></span>
+      <!-- SVG del Check para el estado Añadido -->
+      <svg class="check-svg" id="check-icon" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="btn-text">Añadir al carrito</span>
+    </button>
+  </article>
+
+  <!--  Lógica JavaScript -->
+  <script>
+    const btn = document.getElementById('btn-add');
+    const btnText = document.getElementById('btn-text');
+    const checkIcon = document.getElementById('check-icon');
+
+    btn.addEventListener('click', () => {
+      // Evita disparar el flujo múltiples veces si ya está cargando o añadido
+      if (btn.classList.contains('cargando') || btn.innerText === "Añadido") return;
+
+      // Inicia estado ".cargando" por 1.5 segundos
+      btn.classList.add('cargando');
+      btnText.textContent = 'Añadiendo';
+
+      setTimeout(() => {
+        // 2. Finaliza estado de carga
+        btn.classList.remove('cargando');
+        
+        // Cambia a "Añadido" mostrando el check SVG
+        btnText.textContent = 'Añadido';
+        checkIcon.style.display = 'block';
+        
+        //  Cambia el estilo del botón para denotar éxito
+        btn.style.backgroundColor = '#10b981'; 
+      }, 1500); // 1.5 segundos exactos
+    });
+  </script>
+</body>
+</html>
